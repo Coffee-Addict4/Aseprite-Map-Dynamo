@@ -1,0 +1,31 @@
+# Base image for tile checking operations
+FROM alpine:3.18
+
+# Install dependencies
+RUN apk add --no-cache \
+    g++ \
+    make \
+    cmake \
+    libstdc++ \
+    && rm -rf /var/cache/apk/*
+
+# Set up shared volume mount point
+RUN mkdir -p /mnt/assets /mnt/assets/input /mnt/assets/output /mnt/assets/logs
+
+# Copy tile checker binary
+COPY tile_checker /usr/local/bin/tile_checker
+RUN chmod +x /usr/local/bin/tile_checker
+
+# Set environment variables
+ENV MCP_CONTAINER_MODE=true
+ENV SHARED_VOLUME_PATH=/mnt/assets
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD /usr/local/bin/tile_checker --health-check || exit 1
+
+# Set working directory
+WORKDIR /app
+
+# Default command
+CMD ["/usr/local/bin/tile_checker", "--daemon"]

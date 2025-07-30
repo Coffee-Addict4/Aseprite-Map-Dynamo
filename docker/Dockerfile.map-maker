@@ -1,0 +1,33 @@
+# Base image for map making operations
+FROM ubuntu:22.04
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    g++ \
+    make \
+    cmake \
+    libstdc++6 \
+    libjson-c5 \
+    libxml2 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up shared volume mount point
+RUN mkdir -p /mnt/assets /mnt/assets/input /mnt/assets/output /mnt/assets/logs
+
+# Copy map maker binary
+COPY map_maker /usr/local/bin/map_maker
+RUN chmod +x /usr/local/bin/map_maker
+
+# Set environment variables
+ENV MCP_CONTAINER_MODE=true
+ENV SHARED_VOLUME_PATH=/mnt/assets
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD /usr/local/bin/map_maker --health-check || exit 1
+
+# Set working directory
+WORKDIR /app
+
+# Default command
+CMD ["/usr/local/bin/map_maker", "--daemon"]

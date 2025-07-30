@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  sprite-tool:
+    build:
+      context: .
+      dockerfile: Dockerfile.sprite-tool
+    image: mcp-sprite-tool:latest
+    container_name: mcp-sprite-tool
+    volumes:
+      - shared-assets:/mnt/assets
+      - ../assets:/mnt/host-assets
+    environment:
+      - MCP_CONTAINER_MODE=true
+      - SHARED_VOLUME_PATH=/mnt/assets
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/sprite_tool", "--health-check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+  tile-checker:
+    build:
+      context: .
+      dockerfile: Dockerfile.tile-checker
+    image: mcp-tile-checker:latest
+    container_name: mcp-tile-checker
+    volumes:
+      - shared-assets:/mnt/assets
+      - ../assets:/mnt/host-assets
+    environment:
+      - MCP_CONTAINER_MODE=true
+      - SHARED_VOLUME_PATH=/mnt/assets
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/tile_checker", "--health-check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mcp-network
+    depends_on:
+      - sprite-tool
+
+  map-maker:
+    build:
+      context: .
+      dockerfile: Dockerfile.map-maker
+    image: mcp-map-maker:latest
+    container_name: mcp-map-maker
+    volumes:
+      - shared-assets:/mnt/assets
+      - ../assets:/mnt/host-assets
+    environment:
+      - MCP_CONTAINER_MODE=true
+      - SHARED_VOLUME_PATH=/mnt/assets
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/map_maker", "--health-check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mcp-network
+    depends_on:
+      - tile-checker
+
+  preview-tool:
+    build:
+      context: .
+      dockerfile: Dockerfile.preview-tool
+    image: mcp-preview-tool:latest
+    container_name: mcp-preview-tool
+    volumes:
+      - shared-assets:/mnt/assets
+      - ../assets:/mnt/host-assets
+    environment:
+      - MCP_CONTAINER_MODE=true
+      - SHARED_VOLUME_PATH=/mnt/assets
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/preview_tool", "--health-check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mcp-network
+    depends_on:
+      - map-maker
+
+volumes:
+  shared-assets:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./assets
+
+networks:
+  mcp-network:
+    driver: bridge

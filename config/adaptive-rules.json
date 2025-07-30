@@ -1,0 +1,33 @@
+{
+  "adaptive_logic": {
+    "enhancement_suggestions": {
+      "auto_tagging_threshold": 0.85,
+      "compression_optimization": true,
+      "frame_timing_inference": true,
+      "palette_optimization": true
+    },
+    "model_feedback": {
+      "suggestion_flagging": true,
+      "review_required": true,
+      "semantic_diff_tracking": true,
+      "approval_workflow": true
+    },
+    "procedural_generation": {
+      "zone_complexity_limit": 10,
+      "terrain_variation_factor": 0.7,
+      "gameplay_logic_integration": true
+    }
+  },
+  "performance_tuning": {
+    "batch_processing": {
+      "max_concurrent_tiles": 8,
+      "memory_threshold_mb": 512,
+      "timeout_seconds": 300
+    },
+    "caching": {
+      "enable_metadata_cache": true,
+      "cache_expiry_hours": 24,
+      "max_cache_size_mb": 256
+    }
+  }
+}

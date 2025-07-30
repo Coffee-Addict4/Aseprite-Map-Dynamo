@@ -25,10 +25,16 @@
 - map_maker: Builds layered maps with terrain, gameplay logic, and semantic tags. Embeds tool signatures, data types, and transformation deltas for rollback and validation.
 - preview_tool: Stitches images for preview using native image libraries or system calls to ImageMagick. Generates visual and metadata-based previews for model and human review.
 
-## Integration Notes
-- Use the C++ standard library and STL-first approach for all modules.
+## Integration & Docker Implementation Notes
+- Use Docker to encapsulate each major pipeline stage as a microservice:
+  - Separate containers for sprite operations (Aseprite CLI/scripts), tile checking, packing, metadata editing, map generation, and preview.
+  - Each container runs a single responsibility, following the micro-container guideline.
+- Mount a shared /mnt/assets (or platform-appropriate) volume for asset and metadata exchange between containers.
+- Use Docker health checks for Aseprite and model endpoints.
+- Generate audit logs per run, with logs and outputs written to the shared volume.
+- Use the C++ standard library and STL-first approach for all modules inside containers.
 - Ensure thread safety for all modules that perform concurrent operations.
-- Minimize external dependencies; prefer system calls for non-native tools (Aseprite CLI, TexturePacker, ImageMagick).
+- Minimize external dependencies; prefer system calls for non-native tools (Aseprite CLI, TexturePacker, ImageMagick) within their respective containers.
 - All outputs (PNG, TXT/YAML, JSON) must include tool signatures, versioning, and audit logs for traceability.
 - Model feedback loops: All model-suggested changes are flagged, reviewed, and tracked using semantic diffs. No core architecture or immutable rule is overwritten without explicit approval.
 

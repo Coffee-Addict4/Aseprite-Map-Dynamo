@@ -1,0 +1,45 @@
+{
+  "immutable_rules": {
+    "modularity": {
+      "enforce_single_responsibility": true,
+      "require_interface_separation": true,
+      "prohibit_monolithic_containers": true
+    },
+    "logging": {
+      "require_audit_trails": true,
+      "mandate_tool_signatures": true,
+      "enforce_versioning": true,
+      "require_semantic_diffs": true
+    },
+    "versioning": {
+      "require_transformation_deltas": true,
+      "mandate_rollback_capability": true,
+      "enforce_data_type_embedding": true
+    },
+    "architecture": {
+      "prohibit_core_rule_override": true,
+      "require_explicit_approval_for_changes": true,
+      "enforce_guideline_validation": true
+    }
+  },
+  "aseprite_integration": {
+    "metadata_export": {
+      "require_json_with_png": true,
+      "enforce_tag_structure": true,
+      "mandate_palette_consistency": true
+    },
+    "cli_wrapping": {
+      "require_feedback_enabled_scripts": true,
+      "enforce_error_handling": true,
+      "mandate_audit_logging": true
+    }
+  },
+  "docker_requirements": {
+    "container_design": {
+      "enforce_microservice_pattern": true,
+      "require_shared_volume": "/mnt/assets",
+      "mandate_health_checks": true,
+      "require_audit_logs_per_run": true
+    }
+  }
+}

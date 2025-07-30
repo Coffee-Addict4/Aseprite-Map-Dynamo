@@ -38,32 +38,36 @@ This plan details actionable steps and best practices for implementing the MCP T
 - Allow definition of tag rules, grid boundaries, and semantic labels.
 - Output metadata in JSON or TXT for downstream use and validation.
 
-## 4. Map Pipeline
+## 4. Map Pipeline (Dockerized)
 ### 4.1 map_tool
-- Parse Tiled (.json/.tmx) exports.
+- Containerized: Parse Tiled (.json/.tmx) exports.
 - Validate map structure and data against guidelines and asset metadata.
+- Write outputs and logs to the shared volume.
 
 ### 4.2 zone_tool
-- Implement LDtk-style procedural generation respecting design rules.
-- Ensure all procedural content is auditable and reversible.
+- Containerized: Implement LDtk-style procedural generation respecting design rules.
+- Ensure all procedural content is auditable and reversible, with logs in the shared volume.
 
 ### 4.3 map_maker
-- Build layered maps with terrain, gameplay logic, and semantic tags.
+- Containerized: Build layered maps with terrain, gameplay logic, and semantic tags.
 - Embed tool signatures, data types, and transformation deltas for rollback.
+- Write all outputs and logs to the shared volume.
 
 ### 4.4 preview_tool
-- Stitch map images for preview using native image libraries or ImageMagick.
-- Generate both visual and metadata-based previews for review.
+- Containerized: Stitch map images for preview using native image libraries or ImageMagick.
+- Generate both visual and metadata-based previews for review, with outputs in the shared volume.
 
 ## 5. Integration & Feedback
-- All outputs must include tool signatures, versioning, and audit logs.
+- All outputs must include tool signatures, versioning, and audit logs, written to the shared volume.
 - Implement model feedback loop: flag, review, and track all model-suggested changes using semantic diffs.
 - No core architecture or immutable rule is overwritten without explicit approval.
+- Use Docker health checks to monitor service health and trigger alerts/logs on failure.
 
 ## 6. Testing & Validation
-- Develop unit and integration tests for each module.
-- Validate all outputs against guidelines and audit logs.
+- Develop unit and integration tests for each module and container.
+- Validate all outputs against guidelines and audit logs in the shared volume.
 - Perform manual and automated reviews of map and asset quality.
+- Test Docker orchestration, shared volume access, and health checks.
 
 ## 7. Documentation & Maintenance
 - Document all modules, pipelines, and configuration options.

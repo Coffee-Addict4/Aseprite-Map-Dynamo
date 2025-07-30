@@ -1,0 +1,56 @@
+# Base image for sprite operations with Aseprite
+FROM ubuntu:22.04
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    libxtst6 \
+    libxi6 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install Aseprite (this would need to be adapted for actual Aseprite installation)
+# Note: This is a simplified example - actual Aseprite installation may require different steps
+RUN mkdir -p /opt/aseprite
+# ADD aseprite-linux.tar.gz /opt/aseprite/
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    g++ \
+    cmake \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up shared volume mount point
+RUN mkdir -p /mnt/assets /mnt/assets/input /mnt/assets/output /mnt/assets/logs
+
+# Copy source code
+COPY ../src /app/src
+COPY ../CMakeLists.txt /app/
+COPY ../config /app/config
+
+# Build the project
+WORKDIR /app
+RUN mkdir build && cd build && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    make sprite_tool && \
+    cp sprite_tool /usr/local/bin/sprite_tool && \
+    chmod +x /usr/local/bin/sprite_tool
+
+# Set environment variables
+ENV MCP_CONTAINER_MODE=true
+ENV ASEPRITE_PATH=/opt/aseprite/aseprite
+ENV SHARED_VOLUME_PATH=/mnt/assets
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD /usr/local/bin/sprite_tool --health-check || exit 1
+
+# Set working directory
+WORKDIR /app
+
+# Default command
+CMD ["/usr/local/bin/sprite_tool", "--daemon"]
