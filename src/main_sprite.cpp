@@ -5,6 +5,9 @@
 #include <thread>
 #include <chrono>
 
+using namespace mcp_tool::core;
+using namespace mcp_tool::tileset;
+
 int main(int argc, char* argv[]) {
     try {
         // Initialize configuration

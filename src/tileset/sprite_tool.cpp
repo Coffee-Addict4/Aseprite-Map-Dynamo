@@ -1,23 +1,26 @@
 #include "sprite_tool.h"
 #include <iostream>
 
+using namespace mcp_tool::tileset;
+
 SpriteTool::SpriteTool() {
     std::cout << "SpriteTool initialized" << std::endl;
 }
 
-SpriteTool::~SpriteTool() = default;
-
-bool SpriteTool::ExportSprite(const std::string& /* inputPath */, const std::string& /* outputPath */) {
+bool SpriteTool::ExportSprite(const std::string& /* input_path */, const std::string& /* output_path */, 
+                             const ExportSettings& /* settings */) {
     // Stub implementation
     return true;
 }
 
-std::vector<std::string> SpriteTool::BatchExportSprites(const std::vector<std::string>& /* inputPaths */, const std::string& /* outputDir */) {
+bool SpriteTool::BatchExportSprites(const std::vector<std::string>& /* input_paths */, 
+                                   const std::string& /* output_dir */, 
+                                   const ExportSettings& /* settings */) {
     // Stub implementation
-    return {};
+    return true;
 }
 
-bool SpriteTool::ValidateSprite(const std::string& /* spritePath */) {
+bool SpriteTool::ValidateSprite(const std::string& /* sprite_path */) {
     // Stub implementation
     return true;
 }

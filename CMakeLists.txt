@@ -44,7 +44,7 @@ set(SPRITE_TOOL_SOURCES
 set(TILE_CHECKER_SOURCES
     ${CORE_SOURCES}
     src/tileset/tile_checker.cpp
-    src/main_tile.cpp
+    src/main_tile_checker.cpp
 )
 
 set(MAP_MAKER_SOURCES
