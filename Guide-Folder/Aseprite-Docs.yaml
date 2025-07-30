@@ -1,0 +1,19 @@
+prerequisites:
+  fetch_aseprite_basics:
+    - https://www.aseprite.org/docs/basics/
+    - https://www.aseprite.org/docs/sprite/
+    - https://www.aseprite.org/docs/color/
+    - https://www.aseprite.org/docs/drawing/
+    - https://www.aseprite.org/docs/selecting/
+    - https://www.aseprite.org/docs/transformations/
+
+  sprite_structure:
+    - https://www.aseprite.org/docs/sprite/
+    - https://www.aseprite.org/docs/layers/
+    - https://www.aseprite.org/docs/animation/
+    - https://www.aseprite.org/docs/tilemap/
+    - https://www.aseprite.org/docs/slices/
+
+  api_reference:
+    - https://www.aseprite.org/api
+    # Feel free to request links from the API page as needed
