@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   sprite-tool:
     build:
-      context: .
-      dockerfile: Dockerfile.sprite-tool
+      context: ..
+      dockerfile: docker/Dockerfile.sprite-tool
     image: mcp-sprite-tool:latest
     container_name: mcp-sprite-tool
     volumes:
@@ -25,8 +23,8 @@ services:
 
   tile-checker:
     build:
-      context: .
-      dockerfile: Dockerfile.tile-checker
+      context: ..
+      dockerfile: docker/Dockerfile.tile-checker
     image: mcp-tile-checker:latest
     container_name: mcp-tile-checker
     volumes:
@@ -49,8 +47,8 @@ services:
 
   map-maker:
     build:
-      context: .
-      dockerfile: Dockerfile.map-maker
+      context: ..
+      dockerfile: docker/Dockerfile.map-maker
     image: mcp-map-maker:latest
     container_name: mcp-map-maker
     volumes:
@@ -73,8 +71,8 @@ services:
 
   preview-tool:
     build:
-      context: .
-      dockerfile: Dockerfile.preview-tool
+      context: ..
+      dockerfile: docker/Dockerfile.preview-tool
     image: mcp-preview-tool:latest
     container_name: mcp-preview-tool
     volumes:
@@ -98,10 +96,6 @@ services:
 volumes:
   shared-assets:
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./assets
 
 networks:
   mcp-network:

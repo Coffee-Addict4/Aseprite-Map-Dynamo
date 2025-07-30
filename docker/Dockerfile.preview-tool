@@ -1,0 +1,76 @@
+# Dockerfile for Preview Tool - Linux x86_64 Container
+FROM ubuntu:22.04
+
+LABEL maintainer="MCP Aseprite Map Dynamo"
+LABEL version="1.0.0"
+LABEL description="Preview Tool for map visualization and validation"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    g++ \
+    make \
+    pkg-config \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    libx11-dev \
+    libxrandr2 \
+    libxinerama1 \
+    libxcursor1 \
+    libxi6 \
+    libjpeg-dev \
+    libpng-dev \
+    wget \
+    curl \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Aseprite (headless mode)
+RUN mkdir -p /opt/aseprite && \
+    cd /opt/aseprite && \
+    wget -O aseprite.tar.gz https://github.com/aseprite/aseprite/releases/download/v1.3.2/Aseprite-v1.3.2-Linux.tar.gz || \
+    echo "Manual Aseprite installation required" && \
+    ln -sf /opt/aseprite/bin/aseprite /usr/local/bin/aseprite || true
+
+# Set working directory
+WORKDIR /app
+
+# Copy source code
+COPY src/ ./src/
+COPY CMakeLists.txt ./
+COPY config/ ./config/
+
+# Create build directory and compile
+RUN mkdir -p build && \
+    cd build && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DTARGET_SERVICE=preview-tool && \
+    make -j$(nproc)
+
+# Install the binary
+RUN cp build/preview_tool /usr/local/bin/ && \
+    chmod +x /usr/local/bin/preview_tool
+
+# Create directories for shared assets
+RUN mkdir -p /mnt/assets /mnt/host-assets
+
+# Create non-root user for security
+RUN useradd -m -u 1000 mcpuser && \
+    chown -R mcpuser:mcpuser /mnt/assets /mnt/host-assets /app
+
+USER mcpuser
+
+# Environment variables
+ENV MCP_CONTAINER_MODE=true
+ENV SHARED_VOLUME_PATH=/mnt/assets
+ENV DISPLAY=:99
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD /usr/local/bin/preview_tool --health-check
+
+# Default command
+CMD ["/usr/local/bin/preview_tool", "--daemon"]
+
+# Expose ports if needed for web preview
+EXPOSE 8080

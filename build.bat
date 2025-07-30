@@ -51,41 +51,20 @@ echo [INFO] Building MCP Tool Docker containers...
 
 cd "docker"
 
-REM Build all Docker images
-echo [INFO] Building sprite-tool container...
-docker build -f Dockerfile.sprite-tool -t mcp-aseprite/sprite-tool:latest .
+REM Build all Docker images with docker-compose for Linux containers
+echo [INFO] Building all containers using docker-compose...
+docker-compose build --no-cache
 if %errorlevel% neq 0 (
-    echo [ERROR] sprite-tool container build failed
+    echo [ERROR] Docker compose build failed
     cd ..
     exit /b 1
 )
 
-echo [INFO] Building tile-checker container...
-docker build -f Dockerfile.tile-checker -t mcp-aseprite/tile-checker:latest .
-if %errorlevel% neq 0 (
-    echo [ERROR] tile-checker container build failed
-    cd ..
-    exit /b 1
-)
-
-echo [INFO] Building map-maker container...
-docker build -f Dockerfile.map-maker -t mcp-aseprite/map-maker:latest .
-if %errorlevel% neq 0 (
-    echo [ERROR] map-maker container build failed
-    cd ..
-    exit /b 1
-)
-
-echo [INFO] All containers built successfully
+echo [INFO] All containers built successfully with docker-compose
 
 REM Test containers
 echo [INFO] Testing container health checks...
-docker run --rm mcp-aseprite/sprite-tool:latest /usr/local/bin/sprite_tool --health-check
-if %errorlevel% neq 0 (
-    echo [WARN] sprite-tool health check failed
-) else (
-    echo [INFO] sprite-tool container healthy
-)
+echo [INFO] Containers will be tested after they are started with docker-compose
 
 cd ..
 

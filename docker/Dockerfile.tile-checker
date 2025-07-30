@@ -12,9 +12,18 @@ RUN apk add --no-cache \
 # Set up shared volume mount point
 RUN mkdir -p /mnt/assets /mnt/assets/input /mnt/assets/output /mnt/assets/logs
 
-# Copy tile checker binary
-COPY tile_checker /usr/local/bin/tile_checker
-RUN chmod +x /usr/local/bin/tile_checker
+# Copy source code
+COPY ../src /app/src
+COPY ../CMakeLists.txt /app/
+COPY ../config /app/config
+
+# Build the project
+WORKDIR /app
+RUN mkdir build && cd build && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DTARGET_SERVICE=tile-checker && \
+    make tile_checker && \
+    cp tile_checker /usr/local/bin/tile_checker && \
+    chmod +x /usr/local/bin/tile_checker
 
 # Set environment variables
 ENV MCP_CONTAINER_MODE=true

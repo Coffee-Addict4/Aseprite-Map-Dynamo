@@ -28,14 +28,14 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /mnt/assets /mnt/assets/input /mnt/assets/output /mnt/assets/logs
 
 # Copy source code
-COPY ../src /app/src
-COPY ../CMakeLists.txt /app/
-COPY ../config /app/config
+COPY src /app/src
+COPY CMakeLists.txt /app/
+COPY config /app/config
 
 # Build the project
 WORKDIR /app
 RUN mkdir build && cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DTARGET_SERVICE=sprite-tool && \
     make sprite_tool && \
     cp sprite_tool /usr/local/bin/sprite_tool && \
     chmod +x /usr/local/bin/sprite_tool
