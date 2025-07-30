@@ -1,0 +1,32 @@
+  **MODEL PROOFING & AUTOMATION CONTROL**
+  - DON’T allow the MCP Tool to override foundational design rules (modularity, logging, versioning).
+  - Don't Change our SecurityPolicies.json File.
+  - DO permit model-suggested enhancements only when flagged and reviewed.
+  - DO separate immutable rules (strict-guidelines.json) from adaptable model logic (adaptive-rules.json).
+  - DO track model changes using semantic diffs—not plain diffs—for intention clarity.
+  - These guidelines are protected; model logic may suggest, never overwrite, core architecture unless explicitly approved.
+
+  **ASEPRITE API INTEGRATION**
+  - DON’T batch frames blindly—models may need fine-grain feature access (tags, palette ranges).
+  - DO export .json metadata alongside .png for model consumption.
+  - DO wrap Aseprite CLI calls in feedback-enabled scripts (e.g., infer and adjust frame timing).
+  - DO pre-process animations with model-friendly structure (label, bounds, anchor).
+
+  **DOCKER USAGE GUIDELINES**
+  - DON’T build monoliths—favor micro-containers for sprite ops, CLI tasks, and model inference.
+  - DO mount a shared /mnt/assets volume between containers for data fluidity.
+  - DO generate audit logs per run—especially when inference models are involved.
+  - DO set up health checks for Aseprite and model endpoints.
+
+  **C++ IMPLEMENTATION GUIDELINES**
+   - DON’T assume file structure—use manifest-driven asset loading.
+   - DO create a SpriteBatch or TextureStream class for buffered operations.
+   - DO expose hooks for model inference decisions (e.g., auto-tagging or compression).
+   - DO document low-level memory and buffer behavior to align with model heuristics.
+
+  **GENERAL DESIGN PRINCIPLES**
+  - DON’T hardwire tool logic—design for plug-and-play modules across sprite pipelines.
+  - DON’T ignore pipeline state—use consistent metadata formats to inform model behavior.
+  - DO embed tool signatures and data types into outputs for downstream validation.
+  - DO treat asset transformations as reversible—log deltas for rollback.
+
